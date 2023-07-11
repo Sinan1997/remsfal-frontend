@@ -37,7 +37,18 @@ const router = createRouter({
       // route level code-splitting
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/AccountContactsView.vue')
+    },
+    {
+      path: '/ticket-system',
+      name: 'TicketSystem',
+      component: () => import('@/views/TicketSystemView.vue')
+    },
+    {
+      path: '/create-ticket',
+      name: 'CreateTicket',
+      component: () => import('@/views/CreateTicketView.vue')
     }
+
   ]
 })
 

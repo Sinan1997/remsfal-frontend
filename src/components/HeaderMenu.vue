@@ -27,41 +27,58 @@ export default {
   },
   data() {
     return {
-      selectedProject: 'Projekt auswählen',
+      selectedProject: "Projekt auswählen",
+      selectedTicket: "Online-Ticketsystem",
       items: [
         {
           label: () => this.selectedProject,
-          icon: 'pi pi-fw pi-home',
+          icon: "pi pi-fw pi-home",
           items: [
             {
-              label: 'Neues Projekt',
-              icon: 'pi pi-fw pi-plus',
-              to: {name: 'NewProject'}
-            }
+              label: "Neues Projekt",
+              icon: "pi pi-fw pi-plus",
+              to: { name: "NewProject" },
+            },
           ],
         },
         {
-          label:() => this.userEmail,
-          icon: 'pi pi-fw pi-user',
+          label: () => this.userEmail,
+          icon: "pi pi-fw pi-user",
           items: [
             {
-              label: 'Kontoeinstellungen',
-              icon: 'pi pi-fw pi-user-edit',
-              to: {name: 'AccountSettings'}
+              label: "Kontoeinstellungen",
+              icon: "pi pi-fw pi-user-edit",
+              to: { name: "AccountSettings" },
             },
             {
-              label: 'Meine Kontakte',
-              icon: 'pi pi-fw pi-users',
-              to: {name: 'AccountContacts'}
-            }
-          ]
+              label: "Meine Kontakte",
+              icon: "pi pi-fw pi-users",
+              to: { name: "AccountContacts" },
+            },
+          ],
         },
         {
-          label: 'Abmelden',
-          icon: 'pi pi-fw pi-sign-out',
-          url: 'https://remsfal.de'
-        }
-      ]
+          label: () => this.selectedTicket,
+          icon: "pi pi-fw pi-ticket",
+          items: [
+            {
+              label: "Ticketsystem",
+              icon: "pi pi-fw pi-ticket",
+              to: { name: "TicketSystem" },
+            },
+            {
+              label: "Ticket erstelen",
+              icon: "pi pi-fw pi-plus",
+              to: { name: "CreateTicket" },
+            },
+          ],
+        },
+        {
+          label: "Abmelden",
+          icon: "pi pi-fw pi-sign-out",
+          url: "https://remsfal.de",
+        },
+      ],
     };
   },
   mounted() {
@@ -70,28 +87,39 @@ export default {
   methods: {
     updateProjectItems() {
       console.log("update item ");
-      this.items[0].items =
-          [
-            {
-              label: 'Neues Projekt',
-              icon: 'pi pi-fw pi-plus',
-              to: {name: 'NewProject'}
-            },
-            {
-              separator: true
-            },
-            {
-              label: 'Mein Super Projekt Berliner Str. 12, 13507 Berlin',
-              icon: 'pi pi-fw pi-external-link',
-              to: {name: 'Project', params: { projectId: "1" }}
-            },
-            {
-              label: 'Noch ein besseres Projekt Berliner Str. 15, 13507 Berlin',
-              icon: 'pi pi-fw pi-external-link',
-              to: {name: 'Project', params: { projectId: "2" }}
-            }
-          ]
-    }
-  }
+      this.items[0].items = [
+        {
+          label: "Neues Projekt",
+          icon: "pi pi-fw pi-plus",
+          to: { name: "NewProject" },
+        },
+        {
+          separator: true,
+        },
+        {
+          label: "Mein Super Projekt Berliner Str. 12, 13507 Berlin",
+          icon: "pi pi-fw pi-external-link",
+          to: { name: "Project", params: { projectId: "1" } },
+        },
+        {
+          label: "Noch ein besseres Projekt Berliner Str. 15, 13507 Berlin",
+          icon: "pi pi-fw pi-external-link",
+          to: { name: "Project", params: { projectId: "2" } },
+        },
+      ];
+      this.items[2].items = [
+        {
+          label: "Tickets verwalten",
+          icon: "pi pi-fw pi-ticket",
+          to: { name: "TicketSystem" },
+        },
+        {
+          label: "Ticket erstellen",
+          icon: "pi pi-fw pi-plus",
+          to: { name: "CreateTicket" },
+        },
+      ];
+    },
+  },
 };
 </script>
