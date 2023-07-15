@@ -1,0 +1,298 @@
+import type { TableColumnType } from "ant-design-vue";
+
+type TableDataType = {
+    key: string;
+    id: string;
+    status: string;
+    category: string;
+    description: string;
+    place: string;
+    reviser: string;
+    initiator: string;
+    ticketDate: string;
+  };
+
+  const ticketStatus: string[] = ["Offen", "In Bearbeitung", "Gelöst"];
+  
+  const columns: TableColumnType<TableDataType>[] = [
+    {
+      title: "Ticket",
+      dataIndex: "id",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      filters: [
+        {
+          text: "Solved",
+          value: "Solved",
+        },
+        {
+          text: "Unsolved",
+          value: "Unsolved",
+        },
+      ],
+    },
+    {
+      title: "Kategorie",
+      dataIndex: "category",
+      filters: [
+        {
+          text: "Störung",
+          value: "störung",
+        },
+        {
+          text: "Wartungsanfragen",
+          value: "wartungsanfragen",
+        },
+        {
+          text: "Administrative Anfragen",
+          value: "administrative anfragen",
+        },
+      ],
+    },
+    {
+      title: "Beschreibung",
+      dataIndex: "description",
+    },
+    {
+      title: "Standort",
+      dataIndex: "place",
+    },
+    {
+      title: "zugewiesen an",
+      dataIndex: "reviser",
+    },
+    {
+      title: "Initiator",
+      dataIndex: "initiator",
+    },
+    {
+      title: "Erstellungsdatum",
+      dataIndex: "ticketDate",
+    },
+  ];
+  const data: TableDataType[] = [
+    {
+      key: "1",
+      id: "RE-589",
+      status: ticketStatus[0],
+      category: "Störung",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Thomas Müller",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "2",
+      id: "RE-589",
+      status: ticketStatus[2],
+      category: "Störung",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Aydin Efe Acik",
+      initiator: "Sebastian Becker",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "3",
+      id: "RE-589",
+      status: ticketStatus[0],
+      category: "Wartungsanfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Cem Yildirim",
+      initiator: "Mario Brühl",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    }, {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    {
+      key: "4",
+      id: "RE-589",
+      status: ticketStatus[1],
+      category: "Administrative Anfragen",
+      description: "Test Data",
+      place: "Turmstraße 22",
+      reviser: "Sinan Ertogrul",
+      initiator: "Phil Nebel",
+      ticketDate: "10.10.2023",
+    },
+    
+  ];
+
+  export {data, columns};

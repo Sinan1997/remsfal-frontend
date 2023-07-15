@@ -17,6 +17,10 @@
   margin-left: 20px;
   margin-right: 30px;
 }
+header{
+  position: relative;
+  z-index: 1;
+}
 </style>
 
 <script lang="ts">
@@ -42,6 +46,22 @@ export default {
           ],
         },
         {
+          label: () => this.selectedTicket,
+          icon: "pi pi-fw pi-ticket",
+          items: [
+            {
+              label: "Ticketübersicht",
+              icon: "pi pi-fw pi-ticket",
+              to: { name: "TicketSystem" },
+            },
+            {
+              label: "Ticket erstellen",
+              icon: "pi pi-fw pi-plus",
+              to: { name: "CreateTicket" },
+            },
+          ],
+        },
+        {
           label: () => this.userEmail,
           icon: "pi pi-fw pi-user",
           items: [
@@ -54,22 +74,6 @@ export default {
               label: "Meine Kontakte",
               icon: "pi pi-fw pi-users",
               to: { name: "AccountContacts" },
-            },
-          ],
-        },
-        {
-          label: () => this.selectedTicket,
-          icon: "pi pi-fw pi-ticket",
-          items: [
-            {
-              label: "Ticketsystem",
-              icon: "pi pi-fw pi-ticket",
-              to: { name: "TicketSystem" },
-            },
-            {
-              label: "Ticket erstelen",
-              icon: "pi pi-fw pi-plus",
-              to: { name: "CreateTicket" },
             },
           ],
         },
@@ -107,9 +111,9 @@ export default {
           to: { name: "Project", params: { projectId: "2" } },
         },
       ];
-      this.items[2].items = [
+      this.items[1].items = [
         {
-          label: "Tickets verwalten",
+          label: "Ticketcenter",
           icon: "pi pi-fw pi-ticket",
           to: { name: "TicketSystem" },
         },
