@@ -33,6 +33,7 @@ export default {
     return {
       selectedProject: "Projekt auswählen",
       selectedTicket: "Online-Ticketsystem",
+      selectedTicketIntern: "Online-Ticketsystem(Intern)",
       items: [
         {
           label: () => this.selectedProject,
@@ -50,7 +51,7 @@ export default {
           icon: "pi pi-fw pi-ticket",
           items: [
             {
-              label: "Ticketübersicht",
+              label: "Ticketcenter",
               icon: "pi pi-fw pi-ticket",
               to: { name: "TicketSystem" },
             },
@@ -58,6 +59,32 @@ export default {
               label: "Ticket erstellen",
               icon: "pi pi-fw pi-plus",
               to: { name: "CreateTicket" },
+            },
+          ],
+        },
+        {
+          label: () => this.selectedTicketIntern,
+          icon: "pi pi-fw pi-ticket",
+          items: [
+            {
+              label: "Störung des Arbeitsapltzes",
+              icon: "pi pi-fw pi-desktop",
+              to: { name: "trouble" },
+            },
+            {
+              label: "Serviceanfrage",
+              icon: "pi pi-fw pi-users",
+              to: { name: "service" },
+            },
+            {
+              label: "Neue Hardware anfordern",
+              icon: "pi pi-fw pi-plus",
+              to: { name: "hardware" },
+            },
+            {
+              label: "Defekte Hardware",
+              icon: "pi pi-fw pi-sync",
+              to: { name: "defectHardware" },
             },
           ],
         },
@@ -109,18 +136,6 @@ export default {
           label: "Noch ein besseres Projekt Berliner Str. 15, 13507 Berlin",
           icon: "pi pi-fw pi-external-link",
           to: { name: "Project", params: { projectId: "2" } },
-        },
-      ];
-      this.items[1].items = [
-        {
-          label: "Ticketcenter",
-          icon: "pi pi-fw pi-ticket",
-          to: { name: "TicketSystem" },
-        },
-        {
-          label: "Ticket erstellen",
-          icon: "pi pi-fw pi-plus",
-          to: { name: "CreateTicket" },
         },
       ];
     },

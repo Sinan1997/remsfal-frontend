@@ -47,6 +47,26 @@ const router = createRouter({
       path: '/create-ticket',
       name: 'CreateTicket',
       component: () => import('@/views/CreateTicketView.vue')
+    },
+    {
+      path: '/trouble',
+      name: 'trouble',
+      component: () => import('@/views/TroubleTicketView.vue')
+    },
+    {
+      path: '/service',
+      name: 'service',
+      component: () => import('@/views/ServiceTicketView.vue')
+    },
+    {
+      path: '/new-hardware',
+      name: 'hardware',
+      component: () => import('@/views/NewHardwareTicketView.vue')
+    },
+    {
+      path: '/defect-hardware',
+      name: 'defectHardware',
+      component: () => import('@/views/DefectHardwareTicketView.vue')
     }
 
   ]
