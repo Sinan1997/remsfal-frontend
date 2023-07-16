@@ -84,15 +84,11 @@ const form = reactive({
 });
 
 const rules: Record<string, Rule[]> = {
-  name: [{ required: true, message: "Please enter user name" }],
-  url: [{ required: true, message: "please enter url" }],
-  owner: [{ required: true, message: "Please select an owner" }],
-  type: [{ required: true, message: "Please choose the type" }],
-  approver: [{ required: true, message: "Please choose the approver" }],
-  dateTime: [
-    { required: true, message: "Please choose the dateTime", type: "object" },
-  ],
-  description: [{ required: true, message: "Please enter url description" }],
+  mietNummer: [{ required: true, message: "Bitte geben Sie eine Mietnummer ein" }],
+  email: [{ required: true, message: "Bitte geben Sie eine E-Mail ein" }],
+  category: [{ required: true, message: "Bitte wählen sie eine Kategorie aus" }],
+  adresse: [{ required: true, message: "Bitte geben Sie eine Adresse ein" }],
+  description: [{ required: true, message: "Bitte beschreiben Sie das Anliegen" }],
 };
 
 const open = ref<boolean>(false);
@@ -325,7 +321,7 @@ const value = ref("Kategorie");
           <Menu>
             <MenuItem key="1">
               <ToolTwoTone twoToneColor="#1e5f20" />
-              Wartung und Reperatur
+              Wartung und Reparatur
             </MenuItem>
             <MenuItem key="2">
               <SettingTwoTone twoToneColor="#1e5f20" />
@@ -408,7 +404,7 @@ const value = ref("Kategorie");
                   <SelectOption value="Wartung und Reperatur"
                     >Wartung und Reperatur</SelectOption
                   >
-                  <SelectOption value="Reinigung">Reinugung</SelectOption>
+                  <SelectOption value="Reinigung">Reinigung</SelectOption>
                   <SelectOption value="Gemeinschaftseinrichtungen"
                     >Gemeinschaftseinrichtungen</SelectOption
                   >
