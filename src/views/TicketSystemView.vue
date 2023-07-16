@@ -200,7 +200,7 @@ const value = ref("Kategorie");
       </Card>
       <Card
         title="36"
-        style="color: darkgreen"
+        style="color: #1e5f20"
         :bordered="false"
         class="open-Tickets-Card"
       >
@@ -216,7 +216,7 @@ const value = ref("Kategorie");
           >
             <ArrowRightOutlined
               @click="handleTest"
-              style="font-size: 25px; color: darkgreen"
+              style="font-size: 25px; color: #1e5f20"
             />
           </div>
         </template>
@@ -245,7 +245,7 @@ const value = ref("Kategorie");
           >
             <ArrowRightOutlined
               @click="handleTest"
-              style="font-size: 25px; color: darkgreen"
+              style="font-size: 25px; color: #1e5f20"
             />
           </div>
         </template>
@@ -274,7 +274,7 @@ const value = ref("Kategorie");
           >
             <ArrowRightOutlined
               @click="handleTest"
-              style="font-size: 25px; color: darkgreen"
+              style="font-size: 25px; color: #1e5f20"
             />
           </div>
         </template>
@@ -296,15 +296,15 @@ const value = ref("Kategorie");
         <template #overlay>
           <Menu @click="handleMenuClick">
             <MenuItem key="1">
-              <EditTwoTone twoToneColor="darkgreen" />
+              <EditTwoTone twoToneColor="#1e5f20" />
               Offen
             </MenuItem>
             <MenuItem key="2">
-              <ClockCircleTwoTone twoToneColor="darkgreen" />
+              <ClockCircleTwoTone twoToneColor="#1e5f20" />
               In Bearbeitung
             </MenuItem>
             <MenuItem key="3">
-              <CheckCircleTwoTone twoToneColor="darkgreen" />
+              <CheckCircleTwoTone twoToneColor="#1e5f20" />
               Gelöst
             </MenuItem>
           </Menu>
@@ -324,31 +324,31 @@ const value = ref("Kategorie");
         <template #overlay>
           <Menu>
             <MenuItem key="1">
-              <ToolTwoTone twoToneColor="darkgreen" />
+              <ToolTwoTone twoToneColor="#1e5f20" />
               Wartung und Reperatur
             </MenuItem>
             <MenuItem key="2">
-              <SettingTwoTone twoToneColor="darkgreen" />
+              <SettingTwoTone twoToneColor="#1e5f20" />
               Reinigung
             </MenuItem>
             <MenuItem key="3">
-              <HomeTwoTone twoToneColor="darkgreen" />
+              <HomeTwoTone twoToneColor="#1e5f20" />
               Gemeinschaftseinrichtungen
             </MenuItem>
             <MenuItem key="4">
-              <FileTextTwoTone twoToneColor="darkgreen" />
+              <FileTextTwoTone twoToneColor="#1e5f20" />
               Vertragsangelegenheiten
             </MenuItem>
             <MenuItem key="5">
-              <FileTwoTone twoToneColor="darkgreen" />
+              <FileTwoTone twoToneColor="#1e5f20" />
               Verwaltung
             </MenuItem>
             <MenuItem key="6">
-              <UnlockTwoTone twoToneColor="darkgreen" />
+              <UnlockTwoTone twoToneColor="#1e5f20" />
               Sicherheit
             </MenuItem>
             <MenuItem key="7">
-              <MessageTwoTone twoToneColor="darkgreen" />
+              <MessageTwoTone twoToneColor="#1e5f20" />
               Kommunikation
             </MenuItem>
           </Menu>
@@ -476,7 +476,7 @@ const value = ref("Kategorie");
             <Button
               type="primary"
               @click="onClose"
-              style="background-color: darkgreen"
+              style="background-color: #1e5f20"
               >Bestätigen</Button
             >
           </Space>
@@ -519,7 +519,7 @@ html {
   transform: translateX(-50%);
   font-size: 2.3vw;
   font-weight: bold;
-  color: darkgreen;
+  color: #1e5f20;
 }
 .navigation-title {
   position: absolute;
@@ -527,7 +527,7 @@ html {
   left: 8.6%;
   transform: translateX(-50%);
   font-weight: bold;
-  color: darkgreen;
+  color: #1e5f20;
 }
 .custom-search {
   position: absolute;
@@ -560,7 +560,7 @@ html {
 .add-Ticket-Card {
   width: 150px;
   height: 150px;
-  background-color: darkgreen;
+  background-color: #1e5f20;
   display: flex;
   top: -110vh;
   left: -1%;
