@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import {
   Button,
-  MenuItem,
-  Table,
-  Dropdown,
-  Menu,
-  DropdownButton,
   Card,
-  Drawer,
   Input,
   Form,
   Row,
@@ -22,22 +16,7 @@ import {
   Modal,
   type UploadChangeParam,
 } from "ant-design-vue";
-import {
-  UserOutlined,
-  DownOutlined,
-  CheckCircleTwoTone,
-  ClockCircleTwoTone,
-  EditTwoTone,
-  ToolTwoTone,
-  FileTextTwoTone,
-  UnlockTwoTone,
-  MessageTwoTone,
-  FileTwoTone,
-  HomeTwoTone,
-  SettingTwoTone,
-  PlusCircleTwoTone,
-  ArrowRightOutlined,
-} from "@ant-design/icons-vue";
+
 import { reactive, ref } from "vue";
 import type { Rule } from "ant-design-vue/es/form";
 const open = ref<boolean>(false);

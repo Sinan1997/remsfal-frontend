@@ -84,11 +84,17 @@ const form = reactive({
 });
 
 const rules: Record<string, Rule[]> = {
-  mietNummer: [{ required: true, message: "Bitte geben Sie eine Mietnummer ein" }],
+  mietNummer: [
+    { required: true, message: "Bitte geben Sie eine Mietnummer ein" },
+  ],
   email: [{ required: true, message: "Bitte geben Sie eine E-Mail ein" }],
-  category: [{ required: true, message: "Bitte wählen sie eine Kategorie aus" }],
+  category: [
+    { required: true, message: "Bitte wählen sie eine Kategorie aus" },
+  ],
   adresse: [{ required: true, message: "Bitte geben Sie eine Adresse ein" }],
-  description: [{ required: true, message: "Bitte beschreiben Sie das Anliegen" }],
+  description: [
+    { required: true, message: "Bitte beschreiben Sie das Anliegen" },
+  ],
 };
 
 const open = ref<boolean>(false);
@@ -147,365 +153,361 @@ const options = ref<SelectProps["options"]>([
     label: "Kommunikation",
   },
 ]);
-const handleChangeCategory: SelectProps["onChange"] = (value) => {
-  console.log(value);
-};
 
 const value = ref("Kategorie");
 </script>
 
 <template>
   <main>
-    <div class="container"></div>
-    <h1 class="page-title">Ticketcenter</h1>
-    <h5 class="navigation-title">Online-Ticketsystem/Ticketcenter</h5>
-    <InputSearch
-      class="custom-search"
-      placeholder="Suche.."
-      style="width: 300px"
-    ></InputSearch>
-    <div class="cards">
-      <Card :bordered="false" class="add-Ticket-Card">
-        <template #extra>
-          <div
-            style="
-              display: flex;
-              justify-content: flex-end;
-              align-items: flex-start;
-              margin-top: -15px;
-              margin-right: -15px;
-            "
-          >
-            <PlusOutlined
-              @click="showDrawer"
-              style="font-size: 25px; color: white"
-            />
-          </div>
-        </template>
-        <div style="flex-grow: 1"></div>
-        <h4
-          style="
-            color: white;
-            font-weight: bold;
-            margin-left: -13px;
-            margin-bottom: -10px;
-          "
-        >
-          Ticket erstellen
-        </h4>
-      </Card>
-      <Card
-        title="36"
-        style="color: #1e5f20"
-        :bordered="false"
-        class="open-Tickets-Card"
-      >
-        <template #extra>
-          <div
-            style="
-              display: flex;
-              justify-content: flex-end;
-              align-items: flex-start;
-              margin-top: -15px;
-              margin-right: -15px;
-            "
-          >
-            <ArrowRightOutlined
-              @click="handleTest"
-              style="font-size: 25px; color: #1e5f20"
-            />
-          </div>
-        </template>
-        <div style="flex-grow: 1"></div>
-        <h4
-          style="
-            color: rgb(80, 79, 79);
-            font-weight: bold;
-            margin-left: -13px;
-            margin-bottom: -10px;
-          "
-        >
-          Tickets - Offen
-        </h4>
-      </Card>
-      <Card title="12" :bordered="false" class="own-Tickets-Card">
-        <template #extra>
-          <div
-            style="
-              display: flex;
-              justify-content: flex-end;
-              align-items: flex-start;
-              margin-top: -15px;
-              margin-right: -15px;
-            "
-          >
-            <ArrowRightOutlined
-              @click="handleTest"
-              style="font-size: 25px; color: #1e5f20"
-            />
-          </div>
-        </template>
-        <div style="flex-grow: 1"></div>
-        <h4
-          style="
-            color: rgb(80, 79, 79);
-            font-weight: bold;
-            margin-left: -13px;
-            margin-bottom: -10px;
-          "
-        >
-          Meine Tickets - Offen
-        </h4>
-      </Card>
-      <Card title="4" :bordered="false" class="archiv-Card">
-        <template #extra>
-          <div
-            style="
-              display: flex;
-              justify-content: flex-end;
-              align-items: flex-start;
-              margin-top: -15px;
-              margin-right: -15px;
-            "
-          >
-            <ArrowRightOutlined
-              @click="handleTest"
-              style="font-size: 25px; color: #1e5f20"
-            />
-          </div>
-        </template>
-        <div style="flex-grow: 1"></div>
-        <h4
-          style="
-            color: rgb(80, 79, 79);
-            font-weight: bold;
-            margin-left: -13px;
-            margin-bottom: -10px;
-          "
-        >
-          Archiv
-        </h4>
-      </Card>
-    </div>
-    <div class="status-dropdown-wrap">
-      <Dropdown trigger="click">
-        <template #overlay>
-          <Menu @click="handleMenuClick">
-            <MenuItem key="1">
-              <EditTwoTone twoToneColor="#1e5f20" />
-              Offen
-            </MenuItem>
-            <MenuItem key="2">
-              <ClockCircleTwoTone twoToneColor="#1e5f20" />
-              In Bearbeitung
-            </MenuItem>
-            <MenuItem key="3">
-              <CheckCircleTwoTone twoToneColor="#1e5f20" />
-              Gelöst
-            </MenuItem>
-          </Menu>
-        </template>
-        <template #default>
-          <div class="status-dropdown">
-            <Button>
-              Status
-              <DownOutlined />
-            </Button>
-          </div>
-        </template>
-      </Dropdown>
-    </div>
-    <div class="categroy-dropdown-wrap">
-      <Dropdown trigger="click">
-        <template #overlay>
-          <Menu>
-            <MenuItem key="1">
-              <ToolTwoTone twoToneColor="#1e5f20" />
-              Wartung und Reparatur
-            </MenuItem>
-            <MenuItem key="2">
-              <SettingTwoTone twoToneColor="#1e5f20" />
-              Reinigung
-            </MenuItem>
-            <MenuItem key="3">
-              <HomeTwoTone twoToneColor="#1e5f20" />
-              Gemeinschaftseinrichtungen
-            </MenuItem>
-            <MenuItem key="4">
-              <FileTextTwoTone twoToneColor="#1e5f20" />
-              Vertragsangelegenheiten
-            </MenuItem>
-            <MenuItem key="5">
-              <FileTwoTone twoToneColor="#1e5f20" />
-              Verwaltung
-            </MenuItem>
-            <MenuItem key="6">
-              <UnlockTwoTone twoToneColor="#1e5f20" />
-              Sicherheit
-            </MenuItem>
-            <MenuItem key="7">
-              <MessageTwoTone twoToneColor="#1e5f20" />
-              Kommunikation
-            </MenuItem>
-          </Menu>
-        </template>
-        <template #default>
-          <div class="category-dropdown">
-            <Button>
-              Kategorie
-              <DownOutlined />
-            </Button>
-          </div>
-        </template>
-      </Dropdown>
-    </div>
-    <div class="reset">
-      <Button> Filter zurücksetzen </Button>
-    </div>
-    <div>
-      <Drawer
-        title="Ticket erstellen"
-        :width="720"
-        :open="open"
-        :body-style="{ paddingBottom: '80px' }"
-        :footer-style="{ textAlign: 'right' }"
-        @close="onClose"
-      >
-        >
-        <Form :model="form" :rules="rules" layout="vertical">
-          <Row :gutter="16">
-            <Col :span="12">
-              <FormItem label="Mietvertragsnummer" name="mietNummer">
-                <Input
-                  v-model:value="form.mietNummer"
-                  placeholder="Mietvertragsnummer eingeben"
-                />
-              </FormItem>
-            </Col>
-            <Col :span="12">
-              <FormItem label="E-Mail" name="email">
-                <Input
-                  v-model:value="form.email"
-                  style="width: 100%"
-                  addon-after="@remsfal.de"
-                  placeholder="E-Mail eingeben"
-                />
-              </FormItem>
-            </Col>
-          </Row>
-          <Row :gutter="16">
-            <Col :span="12">
-              <FormItem label="Katerogie" name="category">
-                <Select
-                  :model:value="form.category"
-                  placeholder="Wähle eine Kategorie aus"
-                >
-                  <SelectOption value=""></SelectOption>
-                  <SelectOption value="Wartung und Reperatur"
-                    >Wartung und Reperatur</SelectOption
-                  >
-                  <SelectOption value="Reinigung">Reinigung</SelectOption>
-                  <SelectOption value="Gemeinschaftseinrichtungen"
-                    >Gemeinschaftseinrichtungen</SelectOption
-                  >
-                  <SelectOption value="Vertragsangelegenheiten"
-                    >Vertragsangelegenheiten</SelectOption
-                  >
-                  <SelectOption value="Verwaltung">Verwaltung</SelectOption>
-                  <SelectOption value="Sicherheit">Sicherheit</SelectOption>
-                  <SelectOption value="Kommunikation"
-                    >Kommunikation</SelectOption
-                  >
-                </Select>
-              </FormItem>
-            </Col>
-            <Col :span="12">
-              <FormItem label="Adresse" name="adresse">
-                <Input
-                  v-model:value="form.adress"
-                  placeholder="Adresse eingeben"
-                />
-              </FormItem>
-            </Col>
-          </Row>
-          <Row :gutter="16">
-            <Col :span="24">
-              <FormItem label="Description" name="description">
-                <Textarea
-                  v-model:value="form.description"
-                  :rows="4"
-                  placeholder="Beschreiben Sie Ihr Anliegen.."
-                >
-                </Textarea>
-              </FormItem>
-            </Col>
-          </Row>
-          <Row :gutter="16">
-            <Col :span="24">
-              <UploadDragger
-                v-model:fileList="fileList"
-                name="file"
-                :multiple="true"
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                @change="handleChange"
-                @drop="handleDrop"
-              >
-                <p class="ant-upload-drag-icon">
-                  <inbox-outlined></inbox-outlined>
-                </p>
-                <p class="ant-upload-text">
-                  Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                  hochzuladen
-                </p>
-                <p class="ant-upload-hint">
-                  Unterstützung für Einzel- oder Massen-Uploads. Streng
-                  verbieten von Hochladen von Unternehmensdaten oder anderen
-                  Banddateien
-                </p>
-              </UploadDragger>
-            </Col>
-          </Row>
-        </Form>
-        <template #extra>
-          <Space>
-            <Button @click="onClose">Verlassen</Button>
-            <Button
-              type="primary"
-              @click="onClose"
-              style="background-color: #1e5f20"
-              >Bestätigen</Button
+    <div class="container">
+      <h1 class="page-title">Ticketcenter</h1>
+      <h5 class="navigation-title">Online-Ticketsystem/Ticketcenter</h5>
+      <div class="custom-table">
+        <Table class="custom-table" :columns="columns" :dataSource="data"></Table>
+      </div>
+
+      <InputSearch
+        class="custom-search"
+        placeholder="Suche.."
+        style="width: 300px"
+      ></InputSearch>
+      <div class="cards">
+        <Card :bordered="false" class="add-Ticket-Card">
+          <template #extra>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                margin-top: -15px;
+                margin-right: -15px;
+              "
             >
-          </Space>
-        </template>
-      </Drawer>
+              <PlusOutlined
+                @click="showDrawer"
+                style="font-size: 25px; color: white"
+              />
+            </div>
+          </template>
+          <div style="flex-grow: 1"></div>
+          <h4
+            style="
+              color: white;
+              font-weight: bold;
+              margin-left: -13px;
+              margin-bottom: -10px;
+            "
+          >
+            Ticket erstellen
+          </h4>
+        </Card>
+        <Card
+          title="36"
+          style="color: #1e5f20"
+          :bordered="false"
+          class="open-Tickets-Card"
+        >
+          <template #extra>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                margin-top: -15px;
+                margin-right: -15px;
+              "
+            >
+              <ArrowRightOutlined
+                @click="handleTest"
+                style="font-size: 25px; color: #1e5f20"
+              />
+            </div>
+          </template>
+          <div style="flex-grow: 1"></div>
+          <h4
+            style="
+              color: rgb(80, 79, 79);
+              font-weight: bold;
+              margin-left: -13px;
+              margin-bottom: -10px;
+            "
+          >
+            Tickets - Offen
+          </h4>
+        </Card>
+        <Card title="12" :bordered="false" class="own-Tickets-Card">
+          <template #extra>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                margin-top: -15px;
+                margin-right: -15px;
+              "
+            >
+              <ArrowRightOutlined
+                @click="handleTest"
+                style="font-size: 25px; color: #1e5f20"
+              />
+            </div>
+          </template>
+          <div style="flex-grow: 1"></div>
+          <h4
+            style="
+              color: rgb(80, 79, 79);
+              font-weight: bold;
+              margin-left: -13px;
+              margin-bottom: -10px;
+            "
+          >
+            Meine Tickets - Offen
+          </h4>
+        </Card>
+        <Card title="4" :bordered="false" class="archiv-Card">
+          <template #extra>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                margin-top: -15px;
+                margin-right: -15px;
+              "
+            >
+              <ArrowRightOutlined
+                @click="handleTest"
+                style="font-size: 25px; color: #1e5f20"
+              />
+            </div>
+          </template>
+          <div style="flex-grow: 1"></div>
+          <h4
+            style="
+              color: rgb(80, 79, 79);
+              font-weight: bold;
+              margin-left: -13px;
+              margin-bottom: -10px;
+            "
+          >
+            Archiv
+          </h4>
+        </Card>
+      </div>
+      <div class="status-dropdown-wrap">
+        <Dropdown trigger="click">
+          <template #overlay>
+            <Menu @click="handleMenuClick">
+              <MenuItem key="1">
+                <EditTwoTone twoToneColor="#1e5f20" />
+                Offen
+              </MenuItem>
+              <MenuItem key="2">
+                <ClockCircleTwoTone twoToneColor="#1e5f20" />
+                In Bearbeitung
+              </MenuItem>
+              <MenuItem key="3">
+                <CheckCircleTwoTone twoToneColor="#1e5f20" />
+                Gelöst
+              </MenuItem>
+            </Menu>
+          </template>
+          <template #default>
+            <div class="status-dropdown">
+              <Button>
+                Status
+                <DownOutlined />
+              </Button>
+            </div>
+          </template>
+        </Dropdown>
+      </div>
+      <div class="categroy-dropdown-wrap">
+        <Dropdown trigger="click">
+          <template #overlay>
+            <Menu>
+              <MenuItem key="1">
+                <ToolTwoTone twoToneColor="#1e5f20" />
+                Wartung und Reparatur
+              </MenuItem>
+              <MenuItem key="2">
+                <SettingTwoTone twoToneColor="#1e5f20" />
+                Reinigung
+              </MenuItem>
+              <MenuItem key="3">
+                <HomeTwoTone twoToneColor="#1e5f20" />
+                Gemeinschaftseinrichtungen
+              </MenuItem>
+              <MenuItem key="4">
+                <FileTextTwoTone twoToneColor="#1e5f20" />
+                Vertragsangelegenheiten
+              </MenuItem>
+              <MenuItem key="5">
+                <FileTwoTone twoToneColor="#1e5f20" />
+                Verwaltung
+              </MenuItem>
+              <MenuItem key="6">
+                <UnlockTwoTone twoToneColor="#1e5f20" />
+                Sicherheit
+              </MenuItem>
+              <MenuItem key="7">
+                <MessageTwoTone twoToneColor="#1e5f20" />
+                Kommunikation
+              </MenuItem>
+            </Menu>
+          </template>
+          <template #default>
+            <div class="category-dropdown">
+              <Button>
+                Kategorie
+                <DownOutlined />
+              </Button>
+            </div>
+          </template>
+        </Dropdown>
+      </div>
+      <div class="reset">
+        <Button> Filter zurücksetzen </Button>
+      </div>
+      <div>
+        <Drawer
+          title="Ticket erstellen"
+          :width="720"
+          :open="open"
+          :body-style="{ paddingBottom: '80px' }"
+          :footer-style="{ textAlign: 'right' }"
+          @close="onClose"
+        >
+          >
+          <Form :model="form" :rules="rules" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <Input
+                    v-model:value="form.mietNummer"
+                    placeholder="Mietvertragsnummer eingeben"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    addon-after="@remsfal.de"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                  >
+                    <SelectOption value=""></SelectOption>
+                    <SelectOption value="Wartung und Reperatur"
+                      >Wartung und Reperatur</SelectOption
+                    >
+                    <SelectOption value="Reinigung">Reinigung</SelectOption>
+                    <SelectOption value="Gemeinschaftseinrichtungen"
+                      >Gemeinschaftseinrichtungen</SelectOption
+                    >
+                    <SelectOption value="Vertragsangelegenheiten"
+                      >Vertragsangelegenheiten</SelectOption
+                    >
+                    <SelectOption value="Verwaltung">Verwaltung</SelectOption>
+                    <SelectOption value="Sicherheit">Sicherheit</SelectOption>
+                    <SelectOption value="Kommunikation"
+                      >Kommunikation</SelectOption
+                    >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Description" name="description">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
+                >
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #extra>
+            <Space>
+              <Button @click="onClose">Verlassen</Button>
+              <Button
+                type="primary"
+                @click="onClose"
+                style="background-color: #1e5f20"
+                >Bestätigen</Button
+              >
+            </Space>
+          </template>
+        </Drawer>
+      </div>
     </div>
-    <Table :columns="columns" :dataSource="data" class="custom-table"></Table>
   </main>
 </template>
 
 <style>
-body,
-html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
 .container {
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 150vh;
-  top: 110px;
+  min-height: 120vh;
+  top: 40px;
   background: rgb(235, 233, 233);
-  border-radius: 20px;
-  margin: -70px;
+  border-radius: 15px;
+  margin-left: -3%;
+  margin-right: -3%;
 }
 .custom-table {
-  width: 200%;
   position: relative;
-  top: -1370px;
-  left: -1%;
+  left: 3%;
+  right: 5%;
+  width: 89%;
+  top: 20px;
+  
 }
 
 .page-title {
@@ -554,12 +556,13 @@ html {
 }
 
 .add-Ticket-Card {
+  position: relative;
   width: 150px;
   height: 150px;
   background-color: #1e5f20;
   display: flex;
-  top: -110vh;
-  left: -1%;
+  top: 50vh;
+
   flex-direction: column;
   justify-content: space-between;
 }
@@ -569,7 +572,7 @@ html {
   background-color: white;
   display: flex;
   position: relative;
-  top: -125.6vh;
+  top: 50vh;
   left: 9.5%;
   flex-direction: column;
   justify-content: space-between;
@@ -580,7 +583,7 @@ html {
   background-color: white;
   display: flex;
   position: relative;
-  top: -141.3vh;
+  top: 50vh;
   left: 20%;
   flex-direction: column;
   justify-content: space-between;
@@ -591,7 +594,7 @@ html {
   background-color: white;
   display: flex;
   position: relative;
-  top: -157vh;
+  top: 50vh;
   left: 30.5%;
   flex-direction: column;
   justify-content: space-between;
