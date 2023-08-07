@@ -13,13 +13,23 @@ import {
   UploadDragger,
   message,
   CardMeta,
+  AutoComplete,
   Modal,
   type UploadChangeParam,
 } from "ant-design-vue";
-
 import { reactive, ref } from "vue";
-import type { Rule } from "ant-design-vue/es/form";
-const open = ref<boolean>(false);
+import { mieter, mitarbeiter } from "@/data/testData";
+import { stufe } from "@/data/formCategorys";
+import {
+  wartungReparatur,
+  reinigung,
+  gemeinEinrichtung,
+  vertrag,
+  verwaltung,
+  sicherheit,
+  kommuni,
+} from "@/data/formCategorys";
+
 const modals = ref([false, false]);
 const fileList = ref([]);
 const handleChange = (info: UploadChangeParam) => {
@@ -46,21 +56,9 @@ const form = reactive({
   description: "",
   status: "",
 });
-const rules: Record<string, Rule[]> = {
-  mietNummer: [
-    { required: true, message: "Bitte geben Sie eine Mietnummer ein" },
-  ],
-  email: [{ required: true, message: "Bitte geben Sie eine E-Mail ein" }],
-  category: [
-    { required: true, message: "Bitte wählen sie eine Kategorie aus" },
-  ],
-  adresse: [{ required: true, message: "Bitte geben Sie eine Adresse ein" }],
-  description: [
-    { required: true, message: "Bitte beschreiben Sie das Anliegen" },
-  ],
-};
+
 const showModal = (index: number) => {
-  // Öffnet das entsprechende Modal basierend auf dem Index
+  // open modal based on index
   modals.value[index] = true;
 };
 
@@ -77,885 +75,970 @@ const handleOk = (index: number) => {
 const handleCancel = (index: number) => {
   modals.value[index] = false;
 };
-</script>
 
+interface Option {
+  value: string;
+}
+// live search in testData for standard Tickets for mietVertragsID
+const value2 = ref("");
+const options2 = ref<Option[]>(
+  mieter.map((mieter) => ({ value: mieter.mietVertragsID }))
+);
+const filterOption = (input: string, option: Option) => {
+  return option.value.toUpperCase().indexOf(input.toUpperCase()) >= 0;
+};
+
+// autofill if renter is found
+const foundMietVertragID = () => {
+  const selectedMietVertragID = value2.value;
+
+  const selectedRenter = mieter.find(
+    (mieter) => mieter.mietVertragsID === selectedMietVertragID
+  );
+
+  if (selectedRenter) {
+    form.adress =
+      selectedRenter.adresse +
+      ", " +
+      selectedRenter.plz +
+      " " +
+      selectedRenter.stadt;
+    form.email = selectedRenter.email;
+  } else {
+    form.adress = "";
+    form.email = "";
+  }
+};
+
+// search for worker
+interface EmployeeOption {
+  value: string;
+}
+const valueEmployee = ref("");
+const options3 = ref<EmployeeOption[]>(
+  mitarbeiter.map((mitA) => ({ value: `${mitA.vorname} ${mitA.nachname}` }))
+);
+</script>
 <template>
   <main>
-    <div class="container"></div>
-    <h1 class="page-title">Ticket erstellen</h1>
-    <Card
-      class="reparatur"
-      hoverable
-      style="width: 240px"
-      @click="showModal(0)"
-    >
-      <template #cover>
-        <img alt="example" src="/reparatur.png" />
-      </template>
-      <CardMeta title="Wartung und Reparatur">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[0]"
-      width="1000px"
-      title="Ticket erstellen - Wartung und Reparatur"
-      @ok="handleOk(0)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Sanitärprobleme"
-                  >Sanitärprobleme</SelectOption
-                >
-                <SelectOption value="Elektrische Probleme"
-                  >Elektrische Probleme</SelectOption
-                >
-                <SelectOption value="Heizung, Lüftung und Klimaanlage (HVAC)"
-                  >Heizung, Lüftung und Klimaanlage (HVAC)</SelectOption
-                >
-                <SelectOption value="Schäden an Einrichtungen und Geräten"
-                  >Schäden an Einrichtungen und Geräten</SelectOption
-                >
-                <SelectOption value="Türen, Fenster und Schlösser"
-                  >Türen, Fenster und Schlösser</SelectOption
-                >
-                <SelectOption value="Böden und Wände"
-                  >Böden und Wände</SelectOption
-                >
-                <SelectOption value="Gemeinschaftseinrichtungen"
-                  >Gemeinschaftseinrichtungen</SelectOption
-                >
-                <SelectOption value="Garten- und Landschaftsbereich"
-                  >Garten- und Landschaftsbereich</SelectOption
-                >
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
-            >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(0)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(0)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
+    <div class="container">
+      <h1 class="page-title">Ticket erstellen</h1>
+      <h3 class="description">
+        Hier haben Sie die Möglichkeit, ein neues spezifisches Ticket zu
+        erstellen. Unser Team steht Ihnen gerne zur Verfügung, um Ihnen bei
+        Fragen, Anliegen oder technischen Problemen zu helfen. Bitte wählen Sie
+        einer der Kategorien aus und füllen sie das automatisch geöffnete
+        Formular aus. Geben Sie so viele Detals wie möglich in der Beschreibung
+        an, um die Anfrage effizient bearbeiten zu können.
+      </h3>
+      <h5 class="navigation-title">Online-Ticketsystem/Ticket erstellen</h5>
+      <div class="cards">
+        <Card hoverable style="width: 240px" @click="showModal(0)">
+          <template #cover>
+            <img alt="example" src="/reparatur.png" />
+          </template>
+          <CardMeta title="Wartung und Reparatur">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+        <Modal
+          v-model:open="modals[0]"
+          width="1000px"
+          title="Ticket erstellen - Wartung und Reparatur"
+          @ok="handleOk(0)"
         >
-      </template>
-    </Modal>
-    <Card
-      class="reinigung"
-      hoverable
-      style="width: 240px"
-      @click="showModal(1)"
-    >
-      <template #cover>
-        <img alt="example" src="/reinigung.png" />
-      </template>
-      <CardMeta title="Reinigung">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[1]"
-      width="1000px"
-      title="Ticket erstellen - Reinigung"
-      @ok="handleOk(1)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Allgemeine Reinigung"
-                  >Allgemeine Reinigung</SelectOption
+          <Form :model="form" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <AutoComplete
+                    v-model:value="value2"
+                    :options="options2"
+                    placeholder="Mietvertragsnummer eingeben"
+                    :filterOption="filterOption"
+                    @change="foundMietVertragID"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                    :options="wartungReparatur.map((cat) => ({ value: cat }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Beschreibung" name="Beschreibung">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Dringlichkeit" name="dringlichkeit">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle die Dringlichkeit aus"
+                    :options="stufe.map((stuf) => ({ value: stuf }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                  <AutoComplete
+                    v-model:value="valueEmployee"
+                    :options="options3"
+                    placeholder="Suche nach einem Mitarbeiter"
+                    :filterOption="filterOption"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
                 >
-                <SelectOption value="Treppenhausreinigung"
-                  >Treppenhausreinigung</SelectOption
-                >
-                <SelectOption value="Sanitärreinigung"
-                  >Sanitärreinigung</SelectOption
-                >
-                <SelectOption value="Außenreinigung"
-                  >Außenreinigung</SelectOption
-                >
-                <SelectOption value="Spezialreinigung"
-                  >Spezialreinigung</SelectOption
-                >
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #footer>
+            <Button key="back" @click="handleCancel(0)">Verlassen</Button>
+            <Button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(0)"
+              style="background-color: #1e5f20"
+              >Bestätigen</Button
             >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(1)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(1)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
+          </template>
+        </Modal>
+        <Card hoverable style="width: 240px" @click="showModal(1)">
+          <template #cover>
+            <img alt="example" src="/reinigung.png" />
+          </template>
+          <CardMeta title="Reinigung">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+        <Modal
+          v-model:open="modals[1]"
+          width="1000px"
+          title="Ticket erstellen - Reinigung"
+          @ok="handleOk(1)"
         >
-      </template>
-    </Modal>
-    <Card
-      class="einrichtung"
-      hoverable
-      style="width: 240px"
-      @click="showModal(2)"
-    >
-      <template #cover>
-        <img alt="example" src="/einrichtung.png" />
-      </template>
-      <CardMeta title="Gemeinschaftseinrichtungen">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[2]"
-      width="1000px"
-      title="Ticket erstellen - Gemeinschaftseinrichtungen"
-      @ok="handleOk(2)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Aufzüge">Aufzüge</SelectOption>
-                <SelectOption value="Treppenhäuser">Treppenhäuser</SelectOption>
-                <SelectOption value="Beleuchtung">Beleuchtung</SelectOption>
-                <SelectOption value="Müllentsorgung"
-                  >Müllentsorgung</SelectOption
+          <Form :model="form" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <AutoComplete
+                    v-model:value="value2"
+                    :options="options2"
+                    placeholder="Mietvertragsnummer eingeben"
+                    :filterOption="filterOption"
+                    @change="foundMietVertragID"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                    :options="reinigung.map((cat) => ({ value: cat }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Description" name="description">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Dringlichkeit" name="dringlichkeit">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle die Dringlichkeit aus"
+                    :options="stufe.map((stuf) => ({ value: stuf }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                  <AutoComplete
+                    v-model:value="valueEmployee"
+                    :options="options3"
+                    placeholder="Suche nach einem Mitarbeiter"
+                    :filterOption="filterOption"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
                 >
-                <SelectOption value="Gemeinschaftswaschräume"
-                  >Gemeinschaftswaschräume</SelectOption
-                >
-                <SelectOption value="Fahrradabstellplätze"
-                  >Fahrradabstellplätze</SelectOption
-                >
-                <SelectOption value="Spielplätze oder Freizeiteinrichtungen"
-                  >Spielplätze oder Freizeiteinrichtungen</SelectOption
-                >
-                <SelectOption value="Parkplätze">Parkplätze</SelectOption>
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #footer>
+            <Button key="back" @click="handleCancel(1)">Verlassen</Button>
+            <Button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(1)"
+              style="background-color: #1e5f20"
+              >Bestätigen</Button
             >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(2)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(2)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
+          </template>
+        </Modal>
+        <Card hoverable style="width: 240px" @click="showModal(2)">
+          <template #cover>
+            <img alt="example" src="/einrichtung.png" />
+          </template>
+          <CardMeta title="Gemeinschaftseinrichtungen">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+        <Modal
+          v-model:open="modals[2]"
+          width="1000px"
+          title="Ticket erstellen - Gemeinschaftseinrichtungen"
+          @ok="handleOk(2)"
         >
-      </template>
-    </Modal>
-    <Card class="vertrag" hoverable style="width: 240px" @click="showModal(3)">
-      <template #cover>
-        <img alt="example" src="/vertrag.png" />
-      </template>
-      <CardMeta title="Vertragsangelegenheiten">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[3]"
-      width="1000px"
-      title="Ticket erstellen - Vertragsangelegenheiten"
-      @ok="handleOk(3)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Mietverträge">Mietverträge</SelectOption>
-                <SelectOption value="Nebenkostenabrechnung"
-                  >Nebenkostenabrechnung</SelectOption
+          <Form :model="form" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <AutoComplete
+                    v-model:value="value2"
+                    :options="options2"
+                    placeholder="Mietvertragsnummer eingeben"
+                    :filterOption="filterOption"
+                    @change="foundMietVertragID"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                    :options="gemeinEinrichtung.map((cat) => ({ value: cat }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Description" name="description">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Dringlichkeit" name="dringlichkeit">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle die Dringlichkeit aus"
+                    :options="stufe.map((stuf) => ({ value: stuf }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                  <AutoComplete
+                    v-model:value="valueEmployee"
+                    :options="options3"
+                    placeholder="Suche nach einem Mitarbeiter"
+                    :filterOption="filterOption"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
                 >
-                <SelectOption value="Vertragsänderungen"
-                  >Vertragsänderungen</SelectOption
-                >
-                <SelectOption value="Kündigungen">Kündigungen</SelectOption>
-                <SelectOption value="Mieterrechte und -pflichten"
-                  >Mieterrechte und -pflichten</SelectOption
-                >
-                <SelectOption value="Mietzahlungen">Mietzahlungen</SelectOption>
-                <SelectOption value="Versicherungen"
-                  >Versicherungen</SelectOption
-                >
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #footer>
+            <Button key="back" @click="handleCancel(2)">Verlassen</Button>
+            <Button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(2)"
+              style="background-color: #1e5f20"
+              >Bestätigen</Button
             >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(3)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(3)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
+          </template>
+        </Modal>
+        <Card hoverable style="width: 240px" @click="showModal(3)">
+          <template #cover>
+            <img alt="example" src="/vertrag.png" />
+          </template>
+          <CardMeta title="Vertragsangelegenheiten">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+        <Modal
+          v-model:open="modals[3]"
+          width="1000px"
+          title="Ticket erstellen - Vertragsangelegenheiten"
+          @ok="handleOk(3)"
         >
-      </template>
-    </Modal>
-    <Card
-      class="verwaltung"
-      hoverable
-      style="width: 240px"
-      @click="showModal(4)"
-    >
-      <template #cover>
-        <img alt="example" src="/verwaltung.png" />
-      </template>
-      <CardMeta title="Verwaltung">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[4]"
-      width="1000px"
-      title="Ticket erstellen - Verwaltung"
-      @ok="handleOk(4)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Allgemeine Verwaltung"
-                  >Allgemeine Verwaltung</SelectOption
+          <Form :model="form" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <AutoComplete
+                    v-model:value="value2"
+                    :options="options2"
+                    placeholder="Mietvertragsnummer eingeben"
+                    :filterOption="filterOption"
+                    @change="foundMietVertragID"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                    :options="vertrag.map((cat) => ({ value: cat }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Description" name="description">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Dringlichkeit" name="dringlichkeit">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle die Dringlichkeit aus"
+                    :options="stufe.map((stuf) => ({ value: stuf }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                  <AutoComplete
+                    v-model:value="valueEmployee"
+                    :options="options3"
+                    placeholder="Suche nach einem Mitarbeiter"
+                    :filterOption="filterOption"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
                 >
-                <SelectOption value="Vertragsverwaltung"
-                  >Vertragsverwaltung</SelectOption
-                >
-                <SelectOption value="Finanzverwaltung"
-                  >Finanzverwaltung</SelectOption
-                >
-                <SelectOption value="Dokumentenverwaltung"
-                  >Dokumentenverwaltung</SelectOption
-                >
-                <SelectOption value="Beschwerdemanagement"
-                  >Beschwerdemanagement</SelectOption
-                >
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #footer>
+            <Button key="back" @click="handleCancel(3)">Verlassen</Button>
+            <Button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(3)"
+              style="background-color: #1e5f20"
+              >Bestätigen</Button
             >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(4)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(4)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
+          </template>
+        </Modal>
+        <Card hoverable style="width: 240px" @click="showModal(4)">
+          <template #cover>
+            <img alt="example" src="/verwaltung.png" />
+          </template>
+          <CardMeta title="Verwaltung">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+        <Modal
+          v-model:open="modals[4]"
+          width="1000px"
+          title="Ticket erstellen - Verwaltung"
+          @ok="handleOk(4)"
         >
-      </template>
-    </Modal>
-    <Card
-      class="sicherheit"
-      hoverable
-      style="width: 240px"
-      @click="showModal(5)"
-    >
-      <template #cover>
-        <img alt="example" src="/sicherheit.png" />
-      </template>
-      <CardMeta title="Sicherheit">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[5]"
-      width="1000px"
-      title="Ticket erstellen - Sicherheit"
-      @ok="handleOk(5)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Zugangskontrolle"
-                  >Zugangskontrolle</SelectOption
+          <Form :model="form" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <AutoComplete
+                    v-model:value="value2"
+                    :options="options2"
+                    placeholder="Mietvertragsnummer eingeben"
+                    :filterOption="filterOption"
+                    @change="foundMietVertragID"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                    :options="verwaltung.map((cat) => ({ value: cat }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Description" name="description">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Dringlichkeit" name="dringlichkeit">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle die Dringlichkeit aus"
+                    :options="stufe.map((stuf) => ({ value: stuf }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                  <AutoComplete
+                    v-model:value="valueEmployee"
+                    :options="options3"
+                    placeholder="Suche nach einem Mitarbeiter"
+                    :filterOption="filterOption"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
                 >
-                <SelectOption value="Überwachungssysteme"
-                  >Überwachungssysteme</SelectOption
-                >
-                <SelectOption value="Notfallpläne">Notfallpläne</SelectOption>
-                <SelectOption value="Brandschutz">Brandschutz</SelectOption>
-                <SelectOption value="Sicherheitsrisiken"
-                  >Sicherheitsrisiken</SelectOption
-                >
-                <SelectOption value="Verlust oder Diebstahl"
-                  >Verlust oder Diebstahl</SelectOption
-                >
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #footer>
+            <Button key="back" @click="handleCancel(4)">Verlassen</Button>
+            <Button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(4)"
+              style="background-color: #1e5f20"
+              >Bestätigen</Button
             >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(5)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(5)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
+          </template>
+        </Modal>
+        <Card hoverable style="width: 240px" @click="showModal(5)">
+          <template #cover>
+            <img alt="example" src="/sicherheit.png" />
+          </template>
+          <CardMeta title="Sicherheit">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+        <Modal
+          v-model:open="modals[5]"
+          width="1000px"
+          title="Ticket erstellen - Sicherheit"
+          @ok="handleOk(5)"
         >
-      </template>
-    </Modal>
-    <Card
-      class="kommunikation"
-      hoverable
-      style="width: 240px"
-      @click="showModal(6)"
-    >
-      <template #cover>
-        <img alt="example" src="/kommunikation.png" />
-      </template>
-      <CardMeta title="Kommunikation">
-        <template #description>Ticket erstellen</template>
-      </CardMeta>
-    </Card>
-    <Modal
-      v-model:open="modals[6]"
-      width="1000px"
-      title="Ticket erstellen - Kommunikation"
-      @ok="handleOk(6)"
-    >
-      <Form :model="form" :rules="rules" layout="vertical">
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Mietvertragsnummer" name="mietNummer">
-              <Input
-                v-model:value="form.mietNummer"
-                placeholder="Mietvertragsnummer eingeben"
-                style="width: 60%"
-              />
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="E-Mail" name="email">
-              <Input
-                v-model:value="form.email"
-                style="width: 100%"
-                addon-after="@remsfal.de"
-                placeholder="E-Mail eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="12">
-            <FormItem label="Katerogie" name="category">
-              <Select
-                :model:value="form.category"
-                placeholder="Wähle eine Kategorie aus"
-              >
-                <SelectOption value="Anfragen und Informationen"
-                  >Anfragen und Informationen</SelectOption
+          <Form :model="form" layout="vertical">
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Mietvertragsnummer" name="mietNummer">
+                  <AutoComplete
+                    v-model:value="value2"
+                    :options="options2"
+                    placeholder="Mietvertragsnummer eingeben"
+                    :filterOption="filterOption"
+                    @change="foundMietVertragID"
+                  />
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="E-Mail" name="email">
+                  <Input
+                    v-model:value="form.email"
+                    style="width: 100%"
+                    placeholder="E-Mail eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Katerogie" name="category">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle eine Kategorie aus"
+                    :options="sicherheit.map((cat) => ({ value: cat }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Adresse" name="adresse">
+                  <Input
+                    v-model:value="form.adress"
+                    placeholder="Adresse eingeben"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <FormItem label="Description" name="description">
+                  <Textarea
+                    v-model:value="form.description"
+                    :rows="4"
+                    placeholder="Beschreiben Sie Ihr Anliegen.."
+                  >
+                  </Textarea>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="12">
+                <FormItem label="Dringlichkeit" name="dringlichkeit">
+                  <Select
+                    :model:value="form.category"
+                    placeholder="Wähle die Dringlichkeit aus"
+                    :options="stufe.map((stuf) => ({ value: stuf }))"
+                  >
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col :span="12">
+                <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                  <AutoComplete
+                    v-model:value="valueEmployee"
+                    :options="options3"
+                    placeholder="Suche nach einem Mitarbeiter"
+                    :filterOption="filterOption"
+                  />
+                </FormItem>
+              </Col>
+            </Row>
+            <Row :gutter="16">
+              <Col :span="24">
+                <UploadDragger
+                  v-model:fileList="fileList"
+                  name="file"
+                  :multiple="true"
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  @change="handleChange"
+                  @drop="handleDrop"
                 >
-                <SelectOption value="Beschwerden und Feedback"
-                  >Beschwerden und Feedback</SelectOption
-                >
-                <SelectOption value="Notfallkommunikation"
-                  >Notfallkommunikation</SelectOption
-                >
-                <SelectOption value="Sonstiges">Sonstiges</SelectOption>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col :span="12">
-            <FormItem label="Adresse" name="adresse">
-              <Input
-                v-model:value="form.adress"
-                placeholder="Adresse eingeben"
-              />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <FormItem label="Description" name="description">
-              <Textarea
-                v-model:value="form.description"
-                :rows="4"
-                placeholder="Beschreiben Sie Ihr Anliegen.."
-              >
-              </Textarea>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="16">
-          <Col :span="24">
-            <UploadDragger
-              v-model:fileList="fileList"
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-              @drop="handleDrop"
+                  <p class="ant-upload-drag-icon">
+                    <inbox-outlined></inbox-outlined>
+                  </p>
+                  <p class="ant-upload-text">
+                    Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                    hochzuladen
+                  </p>
+                  <p class="ant-upload-hint">
+                    Unterstützung für Einzel- oder Massen-Uploads. Streng
+                    verbieten von Hochladen von Unternehmensdaten oder anderen
+                    Banddateien
+                  </p>
+                </UploadDragger>
+              </Col>
+            </Row>
+          </Form>
+          <template #footer>
+            <Button key="back" @click="handleCancel(5)">Verlassen</Button>
+            <Button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(5)"
+              style="background-color: #1e5f20"
+              >Bestätigen</Button
             >
-              <p class="ant-upload-drag-icon">
-                <inbox-outlined></inbox-outlined>
-              </p>
-              <p class="ant-upload-text">
-                Klicken oder ziehen Sie die Datei in diesen Bereich um sie
-                hochzuladen
-              </p>
-              <p class="ant-upload-hint">
-                Unterstützung für Einzel- oder Massen-Uploads. Streng verbieten
-                von Hochladen von Unternehmensdaten oder anderen Banddateien
-              </p>
-            </UploadDragger>
-          </Col>
-        </Row>
-      </Form>
-      <template #footer>
-        <Button key="back" @click="handleCancel(6)">Verlassen</Button>
-        <Button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk(6)"
-          style="background-color: #1e5f20"
-          >Bestätigen</Button
-        >
-      </template>
-    </Modal>
+          </template>
+        </Modal>
+        <Card hoverable style="width: 240px" @click="showModal(6)">
+          <template #cover>
+            <img alt="example" src="/kommunikation.png" />
+          </template>
+          <CardMeta title="Kommunikation">
+            <template #description>Ticket erstellen</template>
+          </CardMeta>
+        </Card>
+      </div>
+      <Modal
+        v-model:open="modals[6]"
+        width="1000px"
+        title="Ticket erstellen - Kommunikation"
+        @ok="handleOk(6)"
+      >
+        <Form :model="form" layout="vertical">
+          <Row :gutter="16">
+            <Col :span="12">
+              <FormItem label="Mietvertragsnummer" name="mietNummer">
+                <AutoComplete
+                  v-model:value="value2"
+                  :options="options2"
+                  placeholder="Mietvertragsnummer eingeben"
+                  :filterOption="filterOption"
+                  @change="foundMietVertragID"
+                />
+              </FormItem>
+            </Col>
+            <Col :span="12">
+              <FormItem label="E-Mail" name="email">
+                <Input
+                  v-model:value="form.email"
+                  style="width: 100%"
+                  addon-after="@remsfal.de"
+                  placeholder="E-Mail eingeben"
+                />
+              </FormItem>
+            </Col>
+          </Row>
+          <Row :gutter="16">
+            <Col :span="12">
+              <FormItem label="Katerogie" name="category">
+                <Select
+                  :model:value="form.category"
+                  placeholder="Wähle eine Kategorie aus"
+                  :options="kommuni.map((cat) => ({ value: cat }))"
+                >
+                </Select>
+              </FormItem>
+            </Col>
+            <Col :span="12">
+              <FormItem label="Adresse" name="adresse">
+                <Input
+                  v-model:value="form.adress"
+                  placeholder="Adresse eingeben"
+                />
+              </FormItem>
+            </Col>
+          </Row>
+          <Row :gutter="16">
+            <Col :span="24">
+              <FormItem label="Description" name="description">
+                <Textarea
+                  v-model:value="form.description"
+                  :rows="4"
+                  placeholder="Beschreiben Sie Ihr Anliegen.."
+                >
+                </Textarea>
+              </FormItem>
+            </Col>
+          </Row>
+          <Row :gutter="16">
+            <Col :span="12">
+              <FormItem label="Dringlichkeit" name="dringlichkeit">
+                <Select
+                  :model:value="form.category"
+                  placeholder="Wähle die Dringlichkeit aus"
+                  :options="stufe.map((stuf) => ({ value: stuf }))"
+                >
+                </Select>
+              </FormItem>
+            </Col>
+            <Col :span="12">
+              <FormItem label="Bearbeiter (Optional)" name="bearbeiter">
+                <AutoComplete
+                  v-model:value="valueEmployee"
+                  :options="options3"
+                  placeholder="Suche nach einem Mitarbeiter"
+                  :filterOption="filterOption"
+                />
+              </FormItem>
+            </Col>
+          </Row>
+          <Row :gutter="16">
+            <Col :span="24">
+              <UploadDragger
+                v-model:fileList="fileList"
+                name="file"
+                :multiple="true"
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                @change="handleChange"
+                @drop="handleDrop"
+              >
+                <p class="ant-upload-drag-icon">
+                  <inbox-outlined></inbox-outlined>
+                </p>
+                <p class="ant-upload-text">
+                  Klicken oder ziehen Sie die Datei in diesen Bereich um sie
+                  hochzuladen
+                </p>
+                <p class="ant-upload-hint">
+                  Unterstützung für Einzel- oder Massen-Uploads. Streng
+                  verbieten von Hochladen von Unternehmensdaten oder anderen
+                  Banddateien
+                </p>
+              </UploadDragger>
+            </Col>
+          </Row>
+        </Form>
+        <template #footer>
+          <Button key="back" @click="handleCancel(6)">Verlassen</Button>
+          <Button
+            key="submit"
+            type="primary"
+            :loading="loading"
+            @click="handleOk(6)"
+            style="background-color: #1e5f20"
+            >Bestätigen</Button
+          >
+        </template>
+      </Modal>
+    </div>
   </main>
 </template>
 
@@ -963,70 +1046,61 @@ const handleCancel = (index: number) => {
 .container {
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 150vh;
-  top: 110px;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 40px 3%;
   background: rgb(235, 233, 233);
-  border-radius: 20px;
-  margin: -70px;
+  border-radius: 15px;
+  margin-left: -3%;
+  margin-right: -3%;
+  margin-top: 40px;
+  box-sizing: border-box;
 }
 .page-title {
   position: absolute;
-  top: 120px;
-  left: 12%;
-  transform: translateX(-50%);
+  top: 20px;
+  left: 2%;
   font-size: 2.3vw;
   font-weight: bold;
   color: #1e5f20;
 }
-.reparatur {
+.description {
   position: absolute;
-  top: 290px;
-  left: 11%;
-  transform: translateX(-50%);
+  top: 100px;
+  color: #1e5f20;
+  left: 2%;
+}
+.navigation-title {
+  position: absolute;
+  top: 30vh;
+  margin-left: -5px;
+  font-weight: bold;
+  width: 100%;
   color: #1e5f20;
 }
-.reinigung {
-  position: absolute;
-  top: 290px;
-  left: 27%;
-  transform: translateX(-50%);
-  color: #1e5f20;
+.cards {
+  display: flex;
+  margin-top: 290px;
+  gap: 15px;
+  margin-left: -1px;
 }
-.einrichtung {
-  position: absolute;
-  top: 290px;
-  left: 43%;
-  transform: translateX(-50%);
-  color: #1e5f20;
-}
-.vertrag {
-  position: absolute;
-  top: 290px;
-  left: 59%;
-  transform: translateX(-50%);
-  color: #1e5f20;
-}
-.verwaltung {
-  position: absolute;
-  top: 290px;
-  left: 75%;
-  transform: translateX(-50%);
-  color: #1e5f20;
-}
-.sicherheit {
-  position: absolute;
-  top: 700px;
-  left: 11%;
-  transform: translateX(-50%);
-  color: #1e5f20;
-}
-.kommunikation {
-  position: absolute;
-  top: 700px;
-  left: 27%;
-  transform: translateX(-50%);
-  color: #1e5f20;
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 3%;
+    width: 100%;
+  }
+  .page-title {
+    font-size: 4.5vw;
+    top: 5%;
+  }
+  .navigation-title {
+    font-size: 4vw;
+    top: 8vh;
+  }
+  .cards {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 </style>

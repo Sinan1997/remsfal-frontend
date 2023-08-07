@@ -17,7 +17,7 @@
   margin-left: 20px;
   margin-right: 30px;
 }
-header{
+header {
   position: relative;
   z-index: 1;
 }
@@ -67,24 +67,9 @@ export default {
           icon: "pi pi-fw pi-ticket",
           items: [
             {
-              label: "Störung des Arbeitsapltzes",
-              icon: "pi pi-fw pi-desktop",
-              to: { name: "trouble" },
-            },
-            {
-              label: "Serviceanfrage",
-              icon: "pi pi-fw pi-users",
-              to: { name: "service" },
-            },
-            {
-              label: "Neue Hardware anfordern",
+              label: "Internes Ticket erstellen",
               icon: "pi pi-fw pi-plus",
-              to: { name: "hardware" },
-            },
-            {
-              label: "Defekte Hardware",
-              icon: "pi pi-fw pi-sync",
-              to: { name: "defectHardware" },
+              to: { name: "trouble" },
             },
           ],
         },

@@ -1,298 +1,82 @@
-import type { TableColumnType } from "ant-design-vue";
+import type {
+  Person,
+  Mieter,
+  Mitarbeiter,
+  Wohnung,
+  WohnObjekt,
+  WohnungsGesellschaft,
+} from "./types";
 
-type TableDataType = {
-    key: string;
-    id: string;
-    status: string;
-    category: string;
-    description: string;
-    place: string;
-    reviser: string;
-    initiator: string;
-    ticketDate: string;
-  };
+export const wohnungsGesellschaft: WohnungsGesellschaft = {
+  wohnGesellID: "WG-123",
+  firmenName: "TestFirma",
+  adresse: "Test2straße 2",
+  telNummer: "123456789012",
+  email: "testfirma@remsfal.de",
+  wohnObjekte: [],
+};
 
-  const ticketStatus: string[] = ["Offen", "In Bearbeitung", "Gelöst"];
-  
-  const columns: TableColumnType<TableDataType>[] = [
-    {
-      title: "Ticket",
-      dataIndex: "id",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      filters: [
-        {
-          text: "Solved",
-          value: "Solved",
-        },
-        {
-          text: "Unsolved",
-          value: "Unsolved",
-        },
-      ],
-    },
-    {
-      title: "Kategorie",
-      dataIndex: "category",
-      filters: [
-        {
-          text: "Störung",
-          value: "störung",
-        },
-        {
-          text: "Wartungsanfragen",
-          value: "wartungsanfragen",
-        },
-        {
-          text: "Administrative Anfragen",
-          value: "administrative anfragen",
-        },
-      ],
-    },
-    {
-      title: "Beschreibung",
-      dataIndex: "description",
-    },
-    {
-      title: "Standort",
-      dataIndex: "place",
-    },
-    {
-      title: "zugewiesen an",
-      dataIndex: "reviser",
-    },
-    {
-      title: "Initiator",
-      dataIndex: "initiator",
-    },
-    {
-      title: "Erstellungsdatum",
-      dataIndex: "ticketDate",
-    },
-  ];
-  const data: TableDataType[] = [
-    {
-      key: "1",
-      id: "RE-589",
-      status: ticketStatus[0],
-      category: "Störung",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Thomas Müller",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "2",
-      id: "RE-589",
-      status: ticketStatus[2],
-      category: "Störung",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Aydin Efe Acik",
-      initiator: "Sebastian Becker",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "3",
-      id: "RE-589",
-      status: ticketStatus[0],
-      category: "Wartungsanfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Cem Yildirim",
-      initiator: "Mario Brühl",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    }, {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    {
-      key: "4",
-      id: "RE-589",
-      status: ticketStatus[1],
-      category: "Administrative Anfragen",
-      description: "Test Data",
-      place: "Turmstraße 22",
-      reviser: "Sinan Ertogrul",
-      initiator: "Phil Nebel",
-      ticketDate: "10.10.2023",
-    },
-    
-  ];
+export const wohnObjekt: WohnObjekt = {
+  objektID: "OB-123",
+  adresse: "Teststraße 1-4",
+  anzahlWohn: 10,
+  fahrstuhl: true,
+  baujahr: 2010,
+  zustand: "gut",
+  wohnungsGesellschaftID: wohnungsGesellschaft.wohnGesellID,
+};
 
-  export {data, columns};
+export const wohnung: Wohnung = {
+  wohnungsID: "W-123",
+  größe: 100,
+  zimmer: 3,
+  miete: 1100,
+  zustand: "gut",
+  adresse: "Teststraße 1",
+  etage: 2,
+  balkon: true,
+  wohnObjektID: wohnObjekt.objektID,
+};
+
+export const mieter: Mieter[] = [
+  {
+    vorname: "Sabine",
+    nachname: "Müller",
+    geburtsDatum: new Date("1997-01-10"),
+    adresse: "Musterstaße 1",
+    stadt: "Berlin",
+    plz: "10555",
+    telNummer: "017612345678",
+    email: "sabinemueller@remsfal.de",
+    mietVertragsID: "MV-123",
+    einzugDatum: new Date("2020-01-01"),
+    kaution: 1500,
+    wohnungsID: wohnung.wohnungsID,
+  },
+  {
+    vorname: "Thomas",
+    nachname: "Müller",
+    geburtsDatum: new Date("1997-01-10"),
+    adresse: "Musterstaße 2",
+    stadt: "Berlin",
+    plz: "10555",
+    telNummer: "017612345699",
+    email: "thomasmueller@remsfal.de",
+    mietVertragsID: "MV-124",
+    einzugDatum: new Date("2020-01-01"),
+    kaution: 1500,
+    wohnungsID: wohnung.wohnungsID,
+  },
+];
+
+export const mitarbeiter: Mitarbeiter = {
+  vorname: "Sabine",
+  nachname: "Müller",
+  geburtsDatum: new Date("1997-01-10"),
+  adresse: "Musterstaße 1",
+  telNummer: "017612345678",
+  email: "sabinemueller@remsfal.de",
+  personID: "PS-123",
+  abteilung: "IT",
+  position: "Software-Entwickler",
+};
